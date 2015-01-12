@@ -24,3 +24,16 @@
 
 (test (interp (parse '(+ 3 2))) 5)
 (test (interp (parse '(+ (* 1 2) (+ 2 3)))) 7)
+
+(define-type ArithS
+  [numS (n : number)]
+  [plusS (l : ArithS) (r : ArithS)]
+  [bminusS (l : ArithS) (r : ArithS)]
+  [multS (l : ArithS) (r : ArithS)])
+
+(define (desugar [as : ArithS]) : ArithC
+  (type-case ArithS as
+    [numS (n) (numC n)]
+    [plusS (l r) (plusC (desugar l) (desugar r))]
+    [multS (l r) (multC (desugar l) (desugar r))]
+    [bminusS (l r) (plusC (desugar l) (multC (numC -1) (desugar r)))]))
