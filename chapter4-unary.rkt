@@ -1,5 +1,7 @@
 #lang plai-typed
 
+(print-only-errors true)
+
 (define-type ArithC
   [numC (n : number)]
   [plusC (l : ArithC) (r : ArithC)]
